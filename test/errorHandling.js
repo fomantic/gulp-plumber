@@ -5,7 +5,8 @@ var should = require('should'),
     es = require('event-stream'),
     through2 = require('through2'),
     EE = require('events').EventEmitter,
-    gulp = require('gulp');
+    gulp = require('gulp'),
+    fancyLog = require('fancy-log');
 
 var plumber = require('../');
 
@@ -67,17 +68,17 @@ describe('errorHandler', function () {
             .pipe(this.failingQueueStream);
     });
 
-    xit('default error handler should work', function (done) {
-        // TODO: Find alternative way to test error handler (`gutil.log` was replaced by `fancyLog`)
-        // var mario = plumber();
-        // var _ = gutil.log;
-        // gutil.log = done.bind(null, null);
-        // gulp.src(fixturesGlob)
-        //     .pipe(mario)
-        //     .pipe(this.failingQueueStream)
-        //     .on('end', function () {
-        //         gutil.log = _;
-        //     });
+    it('default error handler should work', function (done) {
+        var mario = plumber();
+        var _ = fancyLog;
+        fancyLog = done.bind(null, null);
+        gulp.src(fixturesGlob)
+            .pipe(mario)
+            .pipe(this.failingQueueStream)
+            .on('end', function () {
+                fancyLog = _;
+                done();
+            });
     });
 
     describe('should attach error handler', function () {

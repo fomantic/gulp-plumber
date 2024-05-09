@@ -1,6 +1,8 @@
 temp/
 coverage
-
+.idea
+.vscode
+.nyc_output
 .editorconfig
 test
 .gitattributes

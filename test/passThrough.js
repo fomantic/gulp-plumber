@@ -17,6 +17,11 @@ describe('stream', function () {
             .pipe(through2.obj())
             .pipe(plumber())
             .pipe(es.writeArray(function (err, array) {
+                array.map((f) => {
+                    delete f.stat.atime;
+                    delete f.stat.atimeMs;
+                    return f;
+                });
                 array.should.eql(this.expected);
                 done();
             }.bind(this)))
@@ -51,6 +56,11 @@ describe('stream', function () {
             gulp.src(fixturesGlob)
                 .pipe(plumber({ errorHandler: done }))
                 .pipe(es.writeArray(function (err, array) {
+                    array.map((f) => {
+                        delete f.stat.atime;
+                        delete f.stat.atimeMs;
+                        return f;
+                    });
                     array.should.eql(this.expected);
                     done();
                 }.bind(this)))
@@ -73,6 +83,11 @@ describe('stream', function () {
     before(function (done) {
         gulp.src(fixturesGlob)
             .pipe(es.writeArray(function (err, array) {
+                array.map((f) => {
+                    delete f.stat.atime;
+                    delete f.stat.atimeMs;
+                    return f;
+                });
                 this.expected = array;
                 done();
             }.bind(this)));
